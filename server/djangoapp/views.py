@@ -85,14 +85,13 @@ def registration(request):
 def get_cars(request):
     count = CarMake.objects.filter().count()
     print(count)
-    initiate()
     if(count == 0):
         initiate()
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
         cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
-    return JsonResponse({"CarModels":cars, "c":count})
+    return JsonResponse({"CarModels":cars})
 
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
@@ -100,12 +99,19 @@ def get_cars(request):
 # ...
 #Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
 def get_dealerships(request, state="All"):
-    if(state == "All"):
-        endpoint = "/fetchDealers"
-    else:
-        endpoint = "/fetchDealers/"+state
-    dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    try:
+        if state == "All":
+            endpoint = "/fetchDealers"
+        else:
+            endpoint = "/fetchDealers/" + state
+        
+        # Assuming get_request is a function to fetch data from the API
+        # You might want to handle errors or parse the response here
+        dealerships = get_request(endpoint)
+        
+        return JsonResponse({"status": 200, "dealers": dealerships})
+    except Exception as e:
+        return JsonResponse({"status": 500, "error": str(e)})
 
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
 # def get_dealer_reviews(request,dealer_id):

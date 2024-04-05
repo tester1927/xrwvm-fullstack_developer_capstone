@@ -1,15 +1,30 @@
 # Uncomment the imports below before you add the function code
-# import requests
+import requests
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-backend_url = os.getenv(
-    'backend_url', default="http://localhost:3030")
-sentiment_analyzer_url = os.getenv(
-    'sentiment_analyzer_url',
-    default="http://localhost:5050/")
+backend_url = "https://u21052030-3030.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
+# os.getenv(
+#     'backend_url', default="http://localhost:3030")
+sentiment_analyzer_url = "https://sentianalyzer.1fdu75z470ed.us-south.codeengine.appdomain.cloud/"
+# os.getenv(
+#     'sentiment_analyzer_url',
+#     default="http://localhost:5050/")
+
+def check_internet_connection():
+    try:
+        # Attempt to make a GET request to a known website
+        response = requests.get("https://www.google.com")
+        # Check if the response status code is successful (2xx)
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+    except requests.ConnectionError:
+        # If a connection error occurs (e.g., no internet connection), return False
+        return False
 
 # def get_request(endpoint, **kwargs):
 def get_request(endpoint, **kwargs):
@@ -27,8 +42,12 @@ def get_request(endpoint, **kwargs):
         return response.json()
     except:
         # If any error occurs
-        print("Network exception occurred")
+        print("Network exception occurred", check_internet_connection())
+
+
 # Add code for get requests to back end
+
+
 
 # def analyze_review_sentiments(text):
 def analyze_review_sentiments(text):
